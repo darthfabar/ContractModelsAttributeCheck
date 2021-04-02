@@ -20,8 +20,24 @@ namespace ContractModelsAttributeCheck
         /// <returns></returns>
         public DistinctTypeList GetUsedContractTypes(IApiDescriptionGroupCollectionProvider apiDescription, string? mediaTypesToCheck = null)
         {
-            var apiDescriptions = apiDescription.ApiDescriptionGroups?.Items?
-                .SelectMany(s => s.Items)
+            var apiDescriptions = apiDescription.ApiDescriptionGroups?.Items;
+            var usedTypes = new DistinctTypeList();
+            foreach (var description in apiDescriptions!)
+            {
+                usedTypes.AddRange(GetUsedContractTypes(description, mediaTypesToCheck));
+            }
+
+            return usedTypes;
+        }
+        /// <summary>
+        /// get a ApiDescriptionGroup from your dependency injection and use it to query all used types
+        /// </summary>
+        /// <param name="apiDescription"></param>
+        /// <param name="mediaTypesToCheck"></param>
+        /// <returns></returns>
+        public DistinctTypeList GetUsedContractTypes(ApiDescriptionGroup apiDescription, string? mediaTypesToCheck = null)
+        {
+            var apiDescriptions = apiDescription.Items
                 .Where(w => w is not null)
                 ;
             var usedTypes = new DistinctTypeList();
