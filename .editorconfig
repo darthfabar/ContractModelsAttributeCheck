@@ -492,7 +492,11 @@ dotnet_naming_rule.parameters_rule.severity             = warning
 dotnet_diagnostic.SA1633.severity = none
 # Default severity for analyzer diagnostics with category 'Naming'
 dotnet_analyzer_diagnostic.category-Naming.severity = none
+dotnet_code_quality.CA1707.api_surface = private, internal, public
+dotnet_diagnostic.CA1707.severity = none
 
+# Default severity for analyzer diagnostics with category 'Naming'
+dotnet_analyzer_diagnostic.category-Naming.severity = none
 ##########################################
 # License
 ##########################################

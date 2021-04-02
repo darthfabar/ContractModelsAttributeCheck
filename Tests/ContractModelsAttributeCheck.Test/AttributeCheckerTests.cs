@@ -1,7 +1,8 @@
 using ContractModelsAttributeCheck.Test.TestTypes;
 using FluentAssertions;
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Text.Json.Serialization;
 using Xunit;
 
 namespace ContractModelsAttributeCheck.Test
@@ -9,6 +10,7 @@ namespace ContractModelsAttributeCheck.Test
     public class AttributeCheckerTests
     {
         private readonly AttributeChecker _attributeChecker = new AttributeChecker();
+        private readonly Type[] _attributes = new[] { typeof(JsonPropertyNameAttribute), typeof(JsonIgnoreAttribute) };
 
         [Fact]
         public void Find_All_Properties_Of_TestClass()
@@ -24,41 +26,42 @@ namespace ContractModelsAttributeCheck.Test
             typesInTestClass.Count.Should().Be(1);
         }
 
-
-
-        //public class TestClass
-        //{
-        //    //public int Id { get; set; }
-        //    //public Guid IdGuid { get; set; }
-        //    //public string Text { get; set; }
-        //    //public object SomeObject { get; set; }
-
-        //    //public string[] ArrayToSkip { get; set; }
-        //    //public List<string> ListToSkip { get; set; }
-        //    //public int[] Numbers { get; set; }
-        //    //public List<int> MoreNumbers { get; set; }
-        //    //public InnerTestClass Inner { get; set; }
-        //    public InnerTestClass1[] Inner1Array { get; set; }
-        //    public List<InnerTestClass2> Inner2List { get; set; }
-        //    public Dictionary<string, InnerTestClass> Dict { get; set; }
-        //}
-
-        public class InnerTestClass
+        [Fact]
+        public void All_Properties_Should_Have_Attributes()
         {
-            public int Id { get; set; }
-            public InnerTestClass MyProperty { get; set; }
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithAttributes), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute);
+            missingAttributes.Should().BeEmpty();
         }
 
-        public class InnerTestClass1
+        [Fact]
+        public void All_Properties_Should_Have_Missing_Attributes()
         {
-            public int Id { get; set; }
-            public InnerTestClass MyProperty { get; set; }
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithoutAttributes), _attributes);
+
+            var propertiesWithAttributes = results.Where(w => w.HasRequiredAttribute);
+            propertiesWithAttributes.Should().BeEmpty();
         }
 
-        public class InnerTestClass2
+        [Fact]
+        public void All_Properties_Should_Have_One_Attribute()
         {
-            public int Id { get; set; }
-            public InnerTestClass MyProperty { get; set; }
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassSomeMissingAttributes), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
+            missingAttributes.Count.Should().Be(1);
+            missingAttributes.First().PropertyName.Should().Be(nameof(TestClassSomeMissingAttributes.MissingAttribute));
+        }
+
+
+        public class TestClassSomeMissingAttributes
+        {
+            [JsonPropertyName("number")]
+            public int Number { get; set; }
+            [JsonIgnore]
+            public string IgnoreMe { get; set; } = string.Empty;
+            public string MissingAttribute { get; set; } = string.Empty;
         }
     }
 }

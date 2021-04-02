@@ -29,6 +29,6 @@ namespace ContractModelsAttributeCheck
         /// <summary>
         /// 
         /// </summary>
-        public bool AllAttributesAreSet { get; set; } 
+        public bool HasRequiredAttribute { get; set; } 
     }
 }

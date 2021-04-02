@@ -76,16 +76,16 @@ namespace ContractModelsAttributeCheck
             var properties = GetPublicProperties(typeToCheck);
             foreach (var property in properties)
             {
-                var attributes = property.GetCustomAttributes().Select(s => s.GetType());
+                var attributes = property.GetCustomAttributes().Select(s => s.GetType()).ToList();
                 var missingAttributes = attributesToCheck.Except(attributes).ToList();
-                var allAttributesAreSet = missingAttributes.Count == 0;
+                var hasRequiredAttribute = attributesToCheck.Length > missingAttributes.Count; 
 
                 var result = new AttributeCheckResult()
                 {
                     Fullname = typeToCheck.FullName ?? typeToCheck.ToString(),
                     PropertyName = property.Name,
-                    AllAttributesAreSet = allAttributesAreSet,
-                    Message = allAttributesAreSet ? "Ok" : $"One of this Attributes are missing: {string.Join(", ", missingAttributes.Select(s => s.Name))}"
+                    HasRequiredAttribute = hasRequiredAttribute,
+                    Message = hasRequiredAttribute ? "Ok" : $"One of this Attributes are missing: {string.Join(", ", missingAttributes.Select(s => s.Name))}"
 
                 };
 
@@ -116,8 +116,8 @@ namespace ContractModelsAttributeCheck
                 if (currentType.IsArray)
                 {
                     var typeOfArry = currentType.GetElementType();
-                    distinctTypeList.Add(currentType);
-                    GetTypesRecursivlyFromPublicProperties(currentType, distinctTypeList);
+                    distinctTypeList.Add(typeOfArry);
+                    GetTypesRecursivlyFromPublicProperties(typeOfArry, distinctTypeList);
                     continue;
                 }
 
