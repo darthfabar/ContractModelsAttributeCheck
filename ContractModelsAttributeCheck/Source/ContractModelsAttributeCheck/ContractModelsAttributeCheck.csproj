@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Build">
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package">
+    <Product>Contract Model Attribute Checks</Product>
+    <Description>Easily check if all your contract model properties use expected attributes (like JsonPropertyName)</Description>
+    <PackageTags></PackageTags>
+  </PropertyGroup>
+
+</Project>

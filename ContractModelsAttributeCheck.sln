@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.218
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContractModelsAttributeCheck", "ContractModelsAttributeCheck\Source\ContractModelsAttributeCheck\ContractModelsAttributeCheck.csproj", "{BFCDEFE2-1709-42A9-923D-969D3F0975FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContractModelsAttributeCheck.Test", "ContractModelsAttributeCheck\Tests\ContractModelsAttributeCheck.Test\ContractModelsAttributeCheck.Test.csproj", "{C55A1015-4113-4B70-A32B-0B61E102D61C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFCDEFE2-1709-42A9-923D-969D3F0975FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFCDEFE2-1709-42A9-923D-969D3F0975FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFCDEFE2-1709-42A9-923D-969D3F0975FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFCDEFE2-1709-42A9-923D-969D3F0975FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C55A1015-4113-4B70-A32B-0B61E102D61C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C55A1015-4113-4B70-A32B-0B61E102D61C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C55A1015-4113-4B70-A32B-0B61E102D61C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C55A1015-4113-4B70-A32B-0B61E102D61C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {89C520F7-6C5A-4B35-B3D6-962F0FF01E45}
+	EndGlobalSection
+EndGlobal
