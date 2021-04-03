@@ -4,13 +4,13 @@ using SampleWebApp.Contract.V2;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 
-namespace SampleWebApp.Controllers
+namespace SampleWebApp.Controllers.V2
 {
     [ApiVersion("2.0")]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    public class ProductsV2Controller
+    public class ProductsController
     {
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, "ok", typeof(IEnumerable<ProductV2>))]

@@ -47,7 +47,7 @@ namespace ContractModelsAttributeCheck
             {
                 var bodyParameter = description.ParameterDescriptions.Where(IsBodyParameter);
                 usedTypes.AddRange(bodyParameter.Select(s => s.Type));
-
+                //TODO option to check for default Asp.net classes
                 var responseParameter = description.SupportedResponseTypes.Where(w => w.Type != null && IsCorrectMediaType(mediaTypesToCheck, w));
                 usedTypes.AddRange(responseParameter.Select(s => s.Type));
             }

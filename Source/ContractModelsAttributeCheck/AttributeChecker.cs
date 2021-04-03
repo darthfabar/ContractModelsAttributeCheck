@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -73,6 +74,7 @@ namespace ContractModelsAttributeCheck
         public List<AttributeCheckResult> CheckPropertiesOfTypeForAttributes(Type typeToCheck, Type[] attributesToCheck)
         {
             var results = new List<AttributeCheckResult>();
+            if (SkipThisTypeFromAttributeChecks(typeToCheck)) return results;
             var properties = GetPublicProperties(typeToCheck);
             foreach (var property in properties)
             {
@@ -95,6 +97,11 @@ namespace ContractModelsAttributeCheck
             return results;
         }
 
+        private bool SkipThisTypeFromAttributeChecks(Type type)
+        {
+            return type.IsArray || type.IsGenericType && type.GetInterfaces().Contains(typeof(ICollection));
+        }
+
         /// <summary>
         /// Creates a DistinctTypeList based on input typeToAnalyse containing all propertytypes
         /// </summary>
@@ -106,6 +113,20 @@ namespace ContractModelsAttributeCheck
             distinctTypeList ??= new DistinctTypeList();
 
             if (ShouldSkipType(distinctTypeList, typeToAnalyse)) return distinctTypeList;
+            if(typeToAnalyse.IsArray)
+            {
+                return GetTypesRecursivlyFromPublicProperties(typeToAnalyse.GetElementType()!, distinctTypeList);
+            }
+
+            if(typeToAnalyse.IsGenericType)
+            {
+                foreach (var item in SelectGenericTypeArguments(distinctTypeList, typeToAnalyse))
+                {
+                    distinctTypeList = GetTypesRecursivlyFromPublicProperties(typeToAnalyse.GetElementType()!, distinctTypeList);
+                }
+                return distinctTypeList;
+            }
+
             distinctTypeList.Add(typeToAnalyse);
             var properties = GetPublicProperties(typeToAnalyse);
             foreach (var property in properties)
@@ -115,7 +136,7 @@ namespace ContractModelsAttributeCheck
 
                 if (currentType.IsArray)
                 {
-                    var typeOfArry = currentType.GetElementType();
+                    var typeOfArry = currentType.GetElementType()!;
                     distinctTypeList.Add(typeOfArry);
                     GetTypesRecursivlyFromPublicProperties(typeOfArry, distinctTypeList);
                     continue;
@@ -123,7 +144,7 @@ namespace ContractModelsAttributeCheck
 
                 if (currentType.IsGenericType)
                 {
-                    foreach (var typeArguments in currentType.GetGenericArguments().Where(w => !ShouldSkipType(distinctTypeList, w)))
+                    foreach (var typeArguments in SelectGenericTypeArguments(distinctTypeList, currentType))
                     {
                         distinctTypeList.Add(typeArguments);
                         GetTypesRecursivlyFromPublicProperties(typeArguments, distinctTypeList);
@@ -140,6 +161,11 @@ namespace ContractModelsAttributeCheck
                 }
             }
             return distinctTypeList;
+        }
+
+        private static IEnumerable<Type> SelectGenericTypeArguments(DistinctTypeList distinctTypeList, Type currentType)
+        {
+            return currentType.GetGenericArguments().Where(w => !ShouldSkipType(distinctTypeList, w));
         }
 
         private static PropertyInfo[] GetPublicProperties(Type typeToAnalyse)

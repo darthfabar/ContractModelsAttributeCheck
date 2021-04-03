@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace ContractModelsAttributeCheck
 {
@@ -16,33 +17,37 @@ namespace ContractModelsAttributeCheck
         /// add type to list
         /// </summary>
         /// <param name="type"></param>
-        public void Add(Type type)
+        [Discardable]
+        public DistinctTypeList Add(Type type)
         {
             _typeList.Add(type);
+            return this;
         }
 
         /// <summary>
         /// add range of types
         /// </summary>
         /// <param name="types"></param>
-        public void AddRange(IEnumerable<Type> types)
+        public DistinctTypeList AddRange(IEnumerable<Type> types)
         {
             foreach (var type in types)
             {
                 Add(type);
             }
+            return this;
         }
 
         /// <summary>
         /// add all types of DistinctTypeList
         /// </summary>
         /// <param name="typeList"></param>
-        public void AddRange(DistinctTypeList typeList)
+        public DistinctTypeList AddRange(DistinctTypeList typeList)
         {
             foreach (var type in typeList.GetAllTypes())
             {
                 Add(type);
             }
+            return typeList;
         }
 
         /// <summary>

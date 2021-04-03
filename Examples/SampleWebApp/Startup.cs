@@ -29,8 +29,8 @@ namespace SampleWebApp
         {
             services.AddControllers();
 
-            services.AddApiVersioning();
-            services.AddVersionedApiExplorer();
+            services.AddApiVersioning(options => options.AssumeDefaultVersionWhenUnspecified = true);
+            services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
 
             services.AddSwaggerGen();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();

@@ -1,6 +1,7 @@
 using ContractModelsAttributeCheck.Test.TestTypes;
 using FluentAssertions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using Xunit;
@@ -52,6 +53,25 @@ namespace ContractModelsAttributeCheck.Test
             var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
             missingAttributes.Count.Should().Be(1);
             missingAttributes.First().PropertyName.Should().Be(nameof(TestClassSomeMissingAttributes.MissingAttribute));
+        }
+
+        [Fact]
+        public void ClassWithEnumListProperty_Should_Not_Add_ListProperties()
+        {
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithEnumProperty), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
+            missingAttributes.Count.Should().Be(1);
+            missingAttributes.First().PropertyName.Should().Be(nameof(TestClassWithEnumProperty.EnumProperty));
+        }
+        
+        [Fact]
+        public void ListOfEnum_Should_Not_Add_ListProperties()
+        {
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(List<ValuesForEnum>), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
+            missingAttributes.Count.Should().Be(0);
         }
 
 
