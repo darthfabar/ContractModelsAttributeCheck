@@ -31,7 +31,7 @@ namespace SampleWebApp.Tests
             // Arrange
             var apiProvider = _factory.Services.GetService<IApiDescriptionGroupCollectionProvider>();
             var apiInfoForVersion = apiProvider.ApiDescriptionGroups.Items.FirstOrDefault(w => w.GroupName == apiVersion);
-            var modelFinder = new ApiDescriptionContractModelsFinder();
+            var modelFinder = new ApiContractModelsFinder();
             // Act
             var contractTypes = modelFinder.GetUsedContractTypes(apiInfoForVersion, "application/json");
 
@@ -45,7 +45,7 @@ namespace SampleWebApp.Tests
             // Arrange
             var apiProvider = _factory.Services.GetService<IApiDescriptionGroupCollectionProvider>();
             var apiInfoForVersion = apiProvider.ApiDescriptionGroups.Items.FirstOrDefault(w => w.GroupName == "v1");
-            var modelFinder = new ApiDescriptionContractModelsFinder();
+            var modelFinder = new ApiContractModelsAttributeChecker();
             // Act
             var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json");
 
@@ -60,7 +60,7 @@ namespace SampleWebApp.Tests
             // Arrange
             var apiProvider = _factory.Services.GetService<IApiDescriptionGroupCollectionProvider>();
             var apiInfoForVersion = apiProvider.ApiDescriptionGroups.Items.FirstOrDefault(w => w.GroupName == "v2");
-            var modelFinder = new ApiDescriptionContractModelsFinder();
+            var modelFinder = new ApiContractModelsAttributeChecker();
             // Act
             var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json");
 

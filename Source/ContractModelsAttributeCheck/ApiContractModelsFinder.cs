@@ -10,7 +10,7 @@ namespace ContractModelsAttributeCheck
     /// <summary>
     /// Enables you to get all used types in your controllers
     /// </summary>
-    public class ApiDescriptionContractModelsFinder
+    public class ApiContractModelsFinder
     {
         private readonly AttributeChecker _attributeChecker = new AttributeChecker();
 
@@ -31,6 +31,7 @@ namespace ContractModelsAttributeCheck
 
             return usedTypes;
         }
+
         /// <summary>
         /// get a ApiDescriptionGroup from your dependency injection and use it to query all used types
         /// </summary>
@@ -53,32 +54,6 @@ namespace ContractModelsAttributeCheck
             }
 
             return usedTypes;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="apiDescription"></param>
-        /// <param name="attributesToCheck"></param>
-        /// <param name="mediaTypesToCheck"></param>
-        /// <returns></returns>
-        public List<AttributeCheckResult> CheckAttributesOfApiContractTypes(ApiDescriptionGroup apiDescription, Type[] attributesToCheck, string? mediaTypesToCheck = null)
-        {
-            var typeList = GetUsedContractTypes(apiDescription, mediaTypesToCheck);
-            return _attributeChecker.CheckPropertiesForAttributes(typeList, attributesToCheck);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="apiDescription"></param>
-        /// <param name="attributesToCheck"></param>
-        /// <param name="mediaTypesToCheck"></param>
-        /// <returns></returns>
-        public List<AttributeCheckResult> CheckAttributesOfApiContractTypes(IApiDescriptionGroupCollectionProvider apiDescription, Type[] attributesToCheck, string? mediaTypesToCheck = null)
-        {
-            var typeList = GetUsedContractTypes(apiDescription, mediaTypesToCheck);
-            return _attributeChecker.CheckPropertiesForAttributes(typeList, attributesToCheck);
         }
 
         private bool IsBodyParameter(ApiParameterDescription w)

@@ -64,11 +64,20 @@ namespace ContractModelsAttributeCheck.Test
             missingAttributes.Count.Should().Be(1);
             missingAttributes.First().PropertyName.Should().Be(nameof(TestClassWithEnumProperty.EnumProperty));
         }
-        
+
         [Fact]
         public void ListOfEnum_Should_Not_Add_ListProperties()
         {
             var results = _attributeChecker.CheckPropertiesForAttributes(typeof(List<ValuesForEnum>), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
+            missingAttributes.Count.Should().Be(0);
+        }
+        [Fact]
+
+        public void Array_Should_Not_Add_ArrayProperties()
+        {
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithAttributes.ClassA[]), _attributes);
 
             var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
             missingAttributes.Count.Should().Be(0);
