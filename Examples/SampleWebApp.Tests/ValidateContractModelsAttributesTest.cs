@@ -24,8 +24,8 @@ namespace SampleWebApp.Tests
         }
 
         [Theory]
-        [InlineData("1.0", typeof(PagingParameters))]
-        [InlineData("2.0", typeof(PagingParametersV2))]
+        [InlineData("v1", typeof(PagingParameters))]
+        [InlineData("v2", typeof(PagingParametersV2))]
         public void Query_V1_ContractModels(string apiVersion, Type typeNotInList)
         {
             // Arrange
@@ -44,7 +44,7 @@ namespace SampleWebApp.Tests
         {
             // Arrange
             var apiProvider = _factory.Services.GetService<IApiDescriptionGroupCollectionProvider>();
-            var apiInfoForVersion = apiProvider.ApiDescriptionGroups.Items.FirstOrDefault(w => w.GroupName == "1.0");
+            var apiInfoForVersion = apiProvider.ApiDescriptionGroups.Items.FirstOrDefault(w => w.GroupName == "v1");
             var modelFinder = new ApiDescriptionContractModelsFinder();
             // Act
             var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json");
@@ -59,7 +59,7 @@ namespace SampleWebApp.Tests
         {
             // Arrange
             var apiProvider = _factory.Services.GetService<IApiDescriptionGroupCollectionProvider>();
-            var apiInfoForVersion = apiProvider.ApiDescriptionGroups.Items.FirstOrDefault(w => w.GroupName == "2.0");
+            var apiInfoForVersion = apiProvider.ApiDescriptionGroups.Items.FirstOrDefault(w => w.GroupName == "v2");
             var modelFinder = new ApiDescriptionContractModelsFinder();
             // Act
             var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json");

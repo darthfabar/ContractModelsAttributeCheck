@@ -87,8 +87,8 @@ namespace ContractModelsAttributeCheck
                     Fullname = typeToCheck.FullName ?? typeToCheck.ToString(),
                     PropertyName = property.Name,
                     HasRequiredAttribute = hasRequiredAttribute,
-                    Message = hasRequiredAttribute ? "Ok" : $"One of this Attributes are missing: {string.Join(", ", missingAttributes.Select(s => s.Name))}"
-
+                    Message = hasRequiredAttribute ? "Ok" : $"One of this Attributes are missing: {string.Join(", ", missingAttributes.Select(s => s.Name))}",
+                    Type = typeToCheck
                 };
 
                 results.Add(result);

@@ -45,5 +45,13 @@ namespace SampleWebApp.Controllers.V2
         {
             return new OkObjectResult(new ProductV2());
         }
+
+        [HttpPost]
+        [Route("dosomething")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "ok")]
+        public IActionResult DoSomething([FromBody] ProductCreateV2 _)
+        {
+            return new NoContentResult();
+        }
     }
 }
