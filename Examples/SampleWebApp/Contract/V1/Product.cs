@@ -3,7 +3,7 @@ namespace SampleWebApp.Contract.V1
     public class Product
     {
         public int Id { get; internal set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
     public class PagingParameters
@@ -15,13 +15,13 @@ namespace SampleWebApp.Contract.V1
 
     public class ProductCreate
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
     public class ErrorResponse
     {
         public int StatusCode { get; set; }
 
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
     }
 }

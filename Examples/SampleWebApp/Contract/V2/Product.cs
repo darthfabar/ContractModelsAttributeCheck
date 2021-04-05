@@ -7,7 +7,7 @@ namespace SampleWebApp.Contract.V2
         [JsonPropertyName("id")]
         public int Id { get; internal set; }
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
     public class PagingParametersV2
@@ -22,7 +22,7 @@ namespace SampleWebApp.Contract.V2
     public class ProductCreateV2
     {
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
     public class ErrorResponseV2
@@ -31,6 +31,6 @@ namespace SampleWebApp.Contract.V2
         public int StatusCode { get; set; }
 
         [JsonPropertyName("message")]
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
     }
 }

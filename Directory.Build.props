@@ -13,10 +13,10 @@
     <Copyright>Copyright © . All rights Reserved</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/darthfabar/ContractModelAttributeChecks</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/darthfabar/ContractModelAttributeChecks.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/darthfabar/ContractModelsAttributeCheck</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/darthfabar/ContractModelsAttributeCheck.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>https://github.com/darthfabar/ContractModelAttributeChecks/releases</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/darthfabar/ContractModelsAttributeCheck/releases</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
