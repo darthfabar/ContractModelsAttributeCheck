@@ -34,7 +34,7 @@ Each property get's a AttributeCheckResult that looks like this:
 
 
 # Use Case: Validate the types you want
-The 'AttributeChecker' first visits types and their property types recursivly and check after this which properties are violating your expected property list.
+The 'AttributeChecker' first visits types and their property types recursivly and checks afterwards which properties are violating your expected attribute list.
  
 ```cs
     public class AttributeCheckerTests
@@ -54,6 +54,7 @@ The 'AttributeChecker' first visits types and their property types recursivly an
 
 # Use Case: Validate OpenApi contract
 ASP.NET Core offers an easy way to create integration tests. See also [Link](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-5.0)
+
 With the 'ApiContractModelsAttributeChecker' class you can search for all used response and request types and check if they use the specified attributes on every property.
 
 The code for this is as simply as this:
