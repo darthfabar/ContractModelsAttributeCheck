@@ -1,16 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ContractModelsAttributeCheck.Test.TestTypes
 {
     public class TestClassWithEnumProperty
     {
-        public List<ValuesForEnum> EnumProperty { get; set; }
+        public List<ValuesForEnumeration> EnumProperty { get; set; } = new List<ValuesForEnumeration>();
 
     }
 
-    public enum ValuesForEnum
+    public enum ValuesForEnumeration
     {
         Yes,
         No,

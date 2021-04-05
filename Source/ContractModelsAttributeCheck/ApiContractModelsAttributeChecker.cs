@@ -34,6 +34,7 @@ namespace ContractModelsAttributeCheck
         /// <param name="apiDescription"></param>
         /// <param name="attributesToCheck"></param>
         /// <param name="mediaTypesToCheck"></param>
+        /// <param name="typesToIgnore"></param>
         /// <returns></returns>
         public List<AttributeCheckResult> CheckAttributesOfApiContractTypes(IApiDescriptionGroupCollectionProvider apiDescription, Type[] attributesToCheck, string? mediaTypesToCheck = null, IEnumerable<Type>? typesToIgnore = null)
         {

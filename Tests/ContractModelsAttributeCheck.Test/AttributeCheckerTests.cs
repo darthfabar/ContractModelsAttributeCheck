@@ -68,7 +68,7 @@ namespace ContractModelsAttributeCheck.Test
         [Fact]
         public void ListOfEnum_Should_Not_Add_ListProperties()
         {
-            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(List<ValuesForEnum>), _attributes);
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(List<ValuesForEnumeration>), _attributes);
 
             var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
             missingAttributes.Count.Should().Be(0);

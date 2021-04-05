@@ -36,6 +36,13 @@ namespace ContractModelsAttributeCheck
         /// </summary>
         public Type Type { get; } 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="hasRequiredAttribute"></param>
+        /// <param name="propertyname"></param>
+        /// <param name="message"></param>
         public AttributeCheckResult(Type type, bool hasRequiredAttribute, string propertyname, string message)
         {
             Type = type;
