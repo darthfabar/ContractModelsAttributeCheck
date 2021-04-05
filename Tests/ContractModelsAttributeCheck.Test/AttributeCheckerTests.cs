@@ -73,14 +73,25 @@ namespace ContractModelsAttributeCheck.Test
             var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
             missingAttributes.Count.Should().Be(0);
         }
-        [Fact]
 
+        [Fact]
         public void Array_Should_Not_Add_ArrayProperties()
         {
             var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithAttributes.ClassA[]), _attributes);
 
             var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
             missingAttributes.Count.Should().Be(0);
+        }
+
+        [Fact]
+        public void Validate_DistinctTypeList()
+        {
+            var distinctTypeList = new DistinctTypeList();
+            distinctTypeList.Add(typeof(TestClassWithoutAttributes.ClassA));
+            distinctTypeList.Add(typeof(TestClassWithoutAttributes.ClassB));
+
+            var results = _attributeChecker.CheckPropertiesForAttributes(distinctTypeList, _attributes);
+            results.Count.Should().Be(distinctTypeList.GetAllTypes().Sum(s => s.GetProperties().Length));
         }
 
 

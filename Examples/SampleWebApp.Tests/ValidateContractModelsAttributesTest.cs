@@ -69,5 +69,18 @@ namespace SampleWebApp.Tests
             missingAttributes.Should().BeEmpty();
         }
 
+        [Fact]
+        public void Validate_All_Models()
+        {
+            // Arrange
+            var apiProvider = _factory.Services.GetService<IApiDescriptionGroupCollectionProvider>();
+            var modelFinder = new ApiContractModelsAttributeChecker();
+            // Act
+            var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiProvider, _attributes, "application/json");
+
+            // Assert
+            var missingAttributes = validationResults.Where(w => !w.HasRequiredAttribute);
+            missingAttributes.Should().NotBeEmpty();
+        }
     }
 }
