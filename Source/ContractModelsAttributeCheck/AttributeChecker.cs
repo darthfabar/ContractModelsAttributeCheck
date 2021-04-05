@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace ContractModelsAttributeCheck
 {
@@ -73,26 +76,12 @@ namespace ContractModelsAttributeCheck
         public List<AttributeCheckResult> CheckPropertiesOfTypeForAttributes(Type typeToCheck, Type[] attributesToCheck)
         {
             var results = new List<AttributeCheckResult>();
+            if (SkipThisTypeFromAttributeChecks(typeToCheck)) return results;
             var properties = GetPublicProperties(typeToCheck);
-            foreach (var property in properties)
-            {
-                var attributes = property.GetCustomAttributes().Select(s => s.GetType()).ToList();
-                var missingAttributes = attributesToCheck.Except(attributes).ToList();
-                var hasRequiredAttribute = attributesToCheck.Length > missingAttributes.Count; 
 
-                var result = new AttributeCheckResult()
-                {
-                    Fullname = typeToCheck.FullName ?? typeToCheck.ToString(),
-                    PropertyName = property.Name,
-                    HasRequiredAttribute = hasRequiredAttribute,
-                    Message = hasRequiredAttribute ? "Ok" : $"One of this Attributes are missing: {string.Join(", ", missingAttributes.Select(s => s.Name))}"
-
-                };
-
-                results.Add(result);
-            }
-
-            return results;
+            return properties
+                .Select(property => ValidateProperty(typeToCheck, attributesToCheck, property))
+                .ToList();
         }
 
         /// <summary>
@@ -105,41 +94,81 @@ namespace ContractModelsAttributeCheck
         {
             distinctTypeList ??= new DistinctTypeList();
 
-            if (ShouldSkipType(distinctTypeList, typeToAnalyse)) return distinctTypeList;
+            if (ShouldSkipType(distinctTypeList, typeToAnalyse) ||
+                SearchForTypesWhenItIsAnArray(typeToAnalyse, distinctTypeList) ||
+                SearchForTypesWhenItIsAGenericType(typeToAnalyse, distinctTypeList))
+            {
+                return distinctTypeList;
+            }
             distinctTypeList.Add(typeToAnalyse);
             var properties = GetPublicProperties(typeToAnalyse);
             foreach (var property in properties)
             {
-                var currentType = property.PropertyType;
-                if (ShouldSkipType(distinctTypeList, currentType)) continue;
-
-                if (currentType.IsArray)
-                {
-                    var typeOfArry = currentType.GetElementType();
-                    distinctTypeList.Add(typeOfArry);
-                    GetTypesRecursivlyFromPublicProperties(typeOfArry, distinctTypeList);
-                    continue;
-                }
-
-                if (currentType.IsGenericType)
-                {
-                    foreach (var typeArguments in currentType.GetGenericArguments().Where(w => !ShouldSkipType(distinctTypeList, w)))
-                    {
-                        distinctTypeList.Add(typeArguments);
-                        GetTypesRecursivlyFromPublicProperties(typeArguments, distinctTypeList);
-
-                    }
-                    continue;
-                }
-
-                if (currentType.IsClass)
-                {
-                    distinctTypeList.Add(currentType);
-                    GetTypesRecursivlyFromPublicProperties(currentType, distinctTypeList);
-                    continue;
-                }
+                SearchPropertyForUsedTypes(distinctTypeList, property);
             }
             return distinctTypeList;
+        }
+
+        private AttributeCheckResult ValidateProperty(Type typeToCheck, Type[] attributesToCheck, PropertyInfo property)
+        {
+            var attributes = property.GetCustomAttributes().Select(s => s.GetType()).ToList();
+            var missingAttributes = attributesToCheck.Except(attributes).ToList();
+            var hasRequiredAttribute = attributesToCheck.Length > missingAttributes.Count;
+
+            var result = new AttributeCheckResult(typeToCheck, hasRequiredAttribute, property.Name, BuildMessage(missingAttributes, hasRequiredAttribute));
+
+            return result;
+        }
+
+        private string BuildMessage(List<Type> missingAttributes, bool hasRequiredAttribute)
+        {
+            return hasRequiredAttribute ? "Ok" : $"One of this Attributes are missing: {string.Join(", ", missingAttributes.Select(s => s.Name))}";
+        }
+
+        private bool SkipThisTypeFromAttributeChecks(Type type)
+        {
+            return type.IsArray || type.IsGenericType && type.GetInterfaces().Contains(typeof(ICollection));
+        }
+
+        private void SearchPropertyForUsedTypes(DistinctTypeList distinctTypeList, PropertyInfo property)
+        {
+            var currentType = property.PropertyType;
+            _ = ShouldSkipType(distinctTypeList, currentType) ||
+                SearchForTypesWhenItIsAnArray(currentType, distinctTypeList) ||
+                SearchForTypesWhenItIsAGenericType(currentType, distinctTypeList) ||
+                SearchForTypesWhenItIsAClass(currentType, distinctTypeList);
+        }
+
+        private bool SearchForTypesWhenItIsAnArray(Type currentType, DistinctTypeList distinctTypeList)
+        {
+            if (!currentType.IsArray) return false;
+            var typeOfArry = currentType.GetElementType()!;
+            GetTypesRecursivlyFromPublicProperties(typeOfArry, distinctTypeList);
+            return true;
+        }
+
+        private bool SearchForTypesWhenItIsAGenericType(Type currentType, DistinctTypeList distinctTypeList)
+        {
+            if (!currentType.IsGenericType) return false;
+
+            foreach (var typeArguments in SelectGenericTypeArguments(distinctTypeList, currentType))
+            {
+                GetTypesRecursivlyFromPublicProperties(typeArguments, distinctTypeList);
+            }
+            return true;
+        }
+
+        private bool SearchForTypesWhenItIsAClass(Type currentType, DistinctTypeList distinctTypeList)
+        {
+            if (!currentType.IsClass) return false;
+            distinctTypeList.Add(currentType);
+            GetTypesRecursivlyFromPublicProperties(currentType, distinctTypeList);
+            return true;
+        }
+
+        private static IEnumerable<Type> SelectGenericTypeArguments(DistinctTypeList distinctTypeList, Type currentType)
+        {
+            return currentType.GetGenericArguments().Where(w => !ShouldSkipType(distinctTypeList, w));
         }
 
         private static PropertyInfo[] GetPublicProperties(Type typeToAnalyse)

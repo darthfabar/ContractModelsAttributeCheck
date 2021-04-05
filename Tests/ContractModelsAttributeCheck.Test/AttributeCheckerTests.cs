@@ -1,6 +1,7 @@
 using ContractModelsAttributeCheck.Test.TestTypes;
 using FluentAssertions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using Xunit;
@@ -31,8 +32,8 @@ namespace ContractModelsAttributeCheck.Test
         {
             var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithAttributes), _attributes);
 
-            var missingAttributes = results.Where(w => !w.HasRequiredAttribute);
-            missingAttributes.Should().BeEmpty();
+            var propertiesWithMissingAttributes = results.Where(w => !w.HasRequiredAttribute);
+            propertiesWithMissingAttributes.Should().BeEmpty();
         }
 
         [Fact]
@@ -40,8 +41,8 @@ namespace ContractModelsAttributeCheck.Test
         {
             var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithoutAttributes), _attributes);
 
-            var propertiesWithAttributes = results.Where(w => w.HasRequiredAttribute);
-            propertiesWithAttributes.Should().BeEmpty();
+            var propertiesWithMissingAttributes = results.Where(w => w.HasRequiredAttribute);
+            propertiesWithMissingAttributes.Should().BeEmpty();
         }
 
         [Fact]
@@ -52,6 +53,45 @@ namespace ContractModelsAttributeCheck.Test
             var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
             missingAttributes.Count.Should().Be(1);
             missingAttributes.First().PropertyName.Should().Be(nameof(TestClassSomeMissingAttributes.MissingAttribute));
+        }
+
+        [Fact]
+        public void ClassWithEnumListProperty_Should_Not_Add_ListProperties()
+        {
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithEnumProperty), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
+            missingAttributes.Count.Should().Be(1);
+            missingAttributes.First().PropertyName.Should().Be(nameof(TestClassWithEnumProperty.EnumProperty));
+        }
+
+        [Fact]
+        public void ListOfEnum_Should_Not_Add_ListProperties()
+        {
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(List<ValuesForEnumeration>), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
+            missingAttributes.Count.Should().Be(0);
+        }
+
+        [Fact]
+        public void Array_Should_Not_Add_ArrayProperties()
+        {
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithAttributes.ClassA[]), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
+            missingAttributes.Count.Should().Be(0);
+        }
+
+        [Fact]
+        public void Validate_DistinctTypeList()
+        {
+            var distinctTypeList = new DistinctTypeList();
+            distinctTypeList.Add(typeof(TestClassWithoutAttributes.ClassA));
+            distinctTypeList.Add(typeof(TestClassWithoutAttributes.ClassB));
+
+            var results = _attributeChecker.CheckPropertiesForAttributes(distinctTypeList, _attributes);
+            results.Count.Should().Be(distinctTypeList.GetAllTypes().Sum(s => s.GetProperties().Length));
         }
 
 

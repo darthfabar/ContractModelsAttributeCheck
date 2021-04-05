@@ -10,8 +10,10 @@ namespace ContractModelsAttributeCheck
     /// <summary>
     /// Enables you to get all used types in your controllers
     /// </summary>
-    public class ApiDescriptionContractModelsFinder
+    public class ApiContractModelsFinder
     {
+        private readonly AttributeChecker _attributeChecker = new AttributeChecker();
+
         /// <summary>
         /// get a IApiDescriptionGroupCollectionProvider from your dependency injection and use it to query all used types
         /// </summary>
@@ -29,6 +31,7 @@ namespace ContractModelsAttributeCheck
 
             return usedTypes;
         }
+
         /// <summary>
         /// get a ApiDescriptionGroup from your dependency injection and use it to query all used types
         /// </summary>
@@ -45,7 +48,7 @@ namespace ContractModelsAttributeCheck
             {
                 var bodyParameter = description.ParameterDescriptions.Where(IsBodyParameter);
                 usedTypes.AddRange(bodyParameter.Select(s => s.Type));
-
+                //TODO option to check for default Asp.net classes
                 var responseParameter = description.SupportedResponseTypes.Where(w => w.Type != null && IsCorrectMediaType(mediaTypesToCheck, w));
                 usedTypes.AddRange(responseParameter.Select(s => s.Type));
             }
