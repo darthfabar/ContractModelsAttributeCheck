@@ -32,8 +32,8 @@ namespace ContractModelsAttributeCheck.Test
         {
             var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithAttributes), _attributes);
 
-            var missingAttributes = results.Where(w => !w.HasRequiredAttribute);
-            missingAttributes.Should().BeEmpty();
+            var typesWithMissingAttributes = results.Where(w => !w.HasRequiredAttribute);
+            typesWithMissingAttributes.Should().BeEmpty();
         }
 
         [Fact]

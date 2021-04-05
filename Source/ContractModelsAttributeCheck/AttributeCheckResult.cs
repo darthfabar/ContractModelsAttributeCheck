@@ -27,7 +27,7 @@ namespace ContractModelsAttributeCheck
         public string Message { get;} 
 
         /// <summary>
-        /// 
+        /// true if at least one attribute is used
         /// </summary>
         public bool HasRequiredAttribute { get; }
 

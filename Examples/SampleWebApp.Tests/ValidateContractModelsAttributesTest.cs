@@ -23,7 +23,7 @@ namespace SampleWebApp.Tests
             _factory = factory;
         }
 
-        [Theory]
+        [Theory(DisplayName ="Don't include models that come FromQuery")]
         [InlineData("v1", typeof(PagingParameters))]
         [InlineData("v2", typeof(PagingParametersV2))]
         public void Query_V1_ContractModels(string apiVersion, Type typeNotInList)
@@ -50,8 +50,8 @@ namespace SampleWebApp.Tests
             var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json");
 
             // Assert
-            var missingAttributes = validationResults.Where(w => w.HasRequiredAttribute);
-            missingAttributes.Should().BeEmpty();
+            var typesWithMissingAttributes = validationResults.Where(w => w.HasRequiredAttribute);
+            typesWithMissingAttributes.Should().BeEmpty();
         }
 
         [Fact]
@@ -65,8 +65,8 @@ namespace SampleWebApp.Tests
             var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json");
 
             // Assert
-            var missingAttributes = validationResults.Where(w => !w.HasRequiredAttribute);
-            missingAttributes.Should().BeEmpty();
+            var typesWithMissingAttributes = validationResults.Where(w => !w.HasRequiredAttribute);
+            typesWithMissingAttributes.Should().BeEmpty();
         }
 
         [Fact]
@@ -79,8 +79,8 @@ namespace SampleWebApp.Tests
             var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiProvider, _attributes, "application/json");
 
             // Assert
-            var missingAttributes = validationResults.Where(w => !w.HasRequiredAttribute);
-            missingAttributes.Should().NotBeEmpty();
+            var typesWithMissingAttributes = validationResults.Where(w => !w.HasRequiredAttribute);
+            typesWithMissingAttributes.Should().NotBeEmpty();
         }
     }
 }

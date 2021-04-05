@@ -28,6 +28,7 @@ namespace ContractModelsAttributeCheck
         /// add range of types
         /// </summary>
         /// <param name="types"></param>
+        [Discardable]
         public DistinctTypeList AddRange(IEnumerable<Type> types)
         {
             foreach (var type in types)
@@ -41,6 +42,7 @@ namespace ContractModelsAttributeCheck
         /// add all types of DistinctTypeList
         /// </summary>
         /// <param name="typeList"></param>
+        [Discardable]
         public DistinctTypeList AddRange(DistinctTypeList typeList)
         {
             foreach (var type in typeList.GetAllTypes())
