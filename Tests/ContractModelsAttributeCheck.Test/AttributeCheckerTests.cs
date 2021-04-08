@@ -75,6 +75,15 @@ namespace ContractModelsAttributeCheck.Test
         }
 
         [Fact]
+        public void Should_Not_Add_Framework_Types()
+        {
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(Uri), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
+            missingAttributes.Count.Should().Be(0);
+        }
+
+        [Fact]
         public void Array_Should_Not_Add_ArrayProperties()
         {
             var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithAttributes.ClassA[]), _attributes);
