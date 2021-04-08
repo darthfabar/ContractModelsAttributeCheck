@@ -96,7 +96,8 @@ namespace ContractModelsAttributeCheck
 
             if (ShouldSkipType(distinctTypeList, typeToAnalyse) ||
                 SearchForTypesWhenItIsAnArray(typeToAnalyse, distinctTypeList) ||
-                SearchForTypesWhenItIsAGenericType(typeToAnalyse, distinctTypeList))
+                SearchForTypesWhenItIsAGenericType(typeToAnalyse, distinctTypeList) ||
+                ShouldSkipFrameworkType(typeToAnalyse))
             {
                 return distinctTypeList;
             }
@@ -182,8 +183,12 @@ namespace ContractModelsAttributeCheck
                     type.IsValueType ||
                     type == typeof(string) ||
                     type == typeof(object) ||
-                    (type.Namespace is not null && (type.Namespace.StartsWith("System") || type.Namespace.StartsWith("Microsoft"))) ||
                     distinctTypeList.ContainsType(type);
+        }
+
+        private static bool ShouldSkipFrameworkType(Type type)
+        {
+            return (type.Namespace is not null && (type.Namespace.StartsWith("System") || type.Namespace.StartsWith("Microsoft")));
         }
     }
 }
