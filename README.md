@@ -1,8 +1,6 @@
 # Contract Models Attribute Checks
 
-[![GitHub Actions Status](https://github.com/darthfabar/ContractModelsAttributeCheck/workflows/Build/badge.svg?branch=main)](https://github.com/darthfabar/ContractModelsAttributeCheck/actions)
-
-[![GitHub Actions Build History](https://buildstats.info/github/chart/darthfabar/ContractModelsAttributeCheck?branch=main&includeBuildsFromPullRequest=false)](https://github.com/darthfabar/ContractModelsAttributeCheck/actions)
+[![Build](https://github.com/darthfabar/ContractModelsAttributeCheck/actions/workflows/build.yml/badge.svg)](https://github.com/darthfabar/ContractModelsAttributeCheck/actions/workflows/build.yml)
 
 # What does this Package do?
 This package enables you to find all used types in an OpenApi contract and check if every DTO has properties that are decorated with attributes like the JsonPropertyNameAttribute. 
