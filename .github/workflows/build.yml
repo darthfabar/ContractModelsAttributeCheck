@@ -45,7 +45,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: 'Dotnet Tool Restore'
-      run: dotnet tool restore
+      run: dotnet tool restore -v diag
       shell: pwsh
     - name: 'Dotnet Cake Build'
       run: dotnet cake --target=Build
