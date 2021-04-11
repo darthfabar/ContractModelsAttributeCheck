@@ -97,6 +97,16 @@ namespace ContractModelsAttributeCheck.Test
         }
 
         [Fact]
+        public void Should_Not_Contain_Uri_Properties()
+        {
+            var results = _attributeChecker.CheckPropertiesForAttributes(typeof(TestClassWithSystemTypeProperty), _attributes);
+
+            var missingAttributes = results.Where(w => !w.HasRequiredAttribute).ToList();
+            missingAttributes.Count.Should().Be(1);
+
+        }
+
+        [Fact]
         public void Validate_DistinctTypeList()
         {
             var distinctTypeList = new DistinctTypeList();

@@ -137,6 +137,7 @@ namespace ContractModelsAttributeCheck
             _ = ShouldSkipType(distinctTypeList, currentType) ||
                 SearchForTypesWhenItIsAnArray(currentType, distinctTypeList) ||
                 SearchForTypesWhenItIsAGenericType(currentType, distinctTypeList) ||
+                ShouldSkipFrameworkType(currentType) ||
                 SearchForTypesWhenItIsAClass(currentType, distinctTypeList);
         }
 
