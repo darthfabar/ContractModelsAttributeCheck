@@ -57,6 +57,25 @@ Task("Test")
                 NoRestore = true,
                 ResultsDirectory = artefactsDirectory,
             });
+    })
+    .DoesForEach(GetFiles("./Examples/**/*Tests.csproj"), project =>
+    {
+        DotNetCoreTest(
+            project.ToString(),
+            new DotNetCoreTestSettings()
+            {
+                Blame = true,
+                Collectors = new string[] { "XPlat Code Coverage" },
+                Configuration = configuration,
+                Loggers = new string[]
+                {
+                    $"trx;LogFileName={project.GetFilenameWithoutExtension()}.trx",
+                    $"html;LogFileName={project.GetFilenameWithoutExtension()}.html",
+                },
+                NoBuild = true,
+                NoRestore = true,
+                ResultsDirectory = artefactsDirectory,
+            });
     });
 
 Task("Pack")
