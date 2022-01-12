@@ -53,5 +53,14 @@ namespace SampleWebApp.Controllers.V2
         {
             return new NoContentResult();
         }
+
+        [HttpGet]
+        [Route("dummy")]
+        [SwaggerResponse(StatusCodes.Status200OK, "ok", typeof(DummyDict))]
+
+        public IActionResult GetDummyModel()
+        {
+            return new NoContentResult();
+        }
     }
 }
