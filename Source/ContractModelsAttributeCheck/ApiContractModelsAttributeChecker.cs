@@ -44,7 +44,7 @@ namespace ContractModelsAttributeCheck
 
         private List<AttributeCheckResult> CheckTypeAttributes(DistinctTypeList typeList, Type[] attributesToCheck, IEnumerable<Type>? typesToIgnore = null)
         {
-            var filteredTypeList = typeList.GetAllTypes().Where(w => typesToIgnore == null || !typesToIgnore.Contains(w));
+            var filteredTypeList = typeList.GetAllTypes().Where(foundType => typesToIgnore == null || typesToIgnore.All(igonoreType => igonoreType != foundType));
             return _attributeChecker.CheckPropertiesForAttributes(filteredTypeList, attributesToCheck);
         }
     }

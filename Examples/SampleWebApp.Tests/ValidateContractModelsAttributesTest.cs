@@ -16,8 +16,8 @@ namespace SampleWebApp.Tests
     public class ValidateContractModelsAttributesTest: IClassFixture<WebApplicationFactory<SampleWebApp.Startup>>
     {
         private readonly WebApplicationFactory<SampleWebApp.Startup> _factory;
-        private readonly Type[] _attributes = new[] { typeof(JsonPropertyNameAttribute), typeof(JsonIgnoreAttribute) };
-
+        private readonly Type[] _attributes = { typeof(JsonPropertyNameAttribute), typeof(JsonIgnoreAttribute) };
+        private readonly Type[] _typesToIgnore = { typeof(DummyDict) };
         public ValidateContractModelsAttributesTest(WebApplicationFactory<SampleWebApp.Startup> factory)
         {
             _factory = factory;
@@ -47,7 +47,7 @@ namespace SampleWebApp.Tests
             var apiInfoForVersion = apiProvider.ApiDescriptionGroups.Items.FirstOrDefault(w => w.GroupName == "v1");
             var modelFinder = new ApiContractModelsAttributeChecker();
             // Act
-            var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json");
+            var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json", _typesToIgnore);
 
             // Assert
             var typesWithMissingAttributes = validationResults.Where(w => w.HasRequiredAttribute);
@@ -62,7 +62,7 @@ namespace SampleWebApp.Tests
             var apiInfoForVersion = apiProvider.ApiDescriptionGroups.Items.FirstOrDefault(w => w.GroupName == "v2");
             var modelFinder = new ApiContractModelsAttributeChecker();
             // Act
-            var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json");
+            var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiInfoForVersion, _attributes, "application/json", _typesToIgnore);
 
             // Assert
             var typesWithMissingAttributes = validationResults.Where(w => !w.HasRequiredAttribute);
@@ -76,7 +76,7 @@ namespace SampleWebApp.Tests
             var apiProvider = _factory.Services.GetService<IApiDescriptionGroupCollectionProvider>();
             var modelFinder = new ApiContractModelsAttributeChecker();
             // Act
-            var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiProvider, _attributes, "application/json");
+            var validationResults = modelFinder.CheckAttributesOfApiContractTypes(apiProvider, _attributes, "application/json", _typesToIgnore);
 
             // Assert
             var typesWithMissingAttributes = validationResults.Where(w => !w.HasRequiredAttribute);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace SampleWebApp.Contract.V2
@@ -33,4 +34,7 @@ namespace SampleWebApp.Contract.V2
         [JsonPropertyName("message")]
         public string Message { get; set; } = string.Empty;
     }
+
+
+    public class DummyDict : Dictionary<string, string>    { }
 }

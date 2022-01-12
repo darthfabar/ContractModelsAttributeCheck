@@ -38,4 +38,13 @@ namespace ContractModelsAttributeCheck.Test.TestTypes
             public int MyProperty { get; set; }
         }
     }
+
+    public class ClassA
+    {
+        [JsonPropertyName("number_field")]
+        public int NumberField { get; set; }
+        [JsonPropertyName("text")]
+        public string Text { get; set; }
+    }
+
 }
